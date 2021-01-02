@@ -2,7 +2,7 @@
 {% import 'components/social.njk' as social %}
 
 <!DOCTYPE html>
-<html>
+<html data-sympolymathesy='root'>
    <head>
       <meta charset='utf-8'/>
       <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -52,6 +52,8 @@
 
       {% block extra_links %}{% endblock extra_links %}
 
+      <link rel='preload' as='script' type='application/javascript' href='/assets/js/main.js'>
+
       {% block meta %}{{ social.meta(page, config) }}{% endblock meta%}
    </head>
    <body>
@@ -84,5 +86,8 @@
             {%- endfor -%}
          </ul>
       </nav>
+
+      <div data-sympolymathesy='preferences' class='preferences no-js-hidden'></div>
+      <script src='/assets/js/main.js'></script>
    </body>
 </html>
