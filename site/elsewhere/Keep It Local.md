@@ -108,12 +108,12 @@ When you’re using a language like Haskell or Elm or Idris which enforces funct
 
 Some of them are the things we typically think about as “computer science” reasoning:
 
-- What’s the algorithmic complexity—and therefore how will handle large amounts of data?
-- How much memory does it use?
+- What’s the algorithmic complexity—and therefore how will it handle large amounts of data?
+- How much memory does it use—and so likewise, how will it scale to large amounts of data?
 
-But there are others, too. For example: “What code do I have to change—
+But there are others, too. For example, *What code do I have to change—*
 
-- if there is a bug in it
+- if there is a bug in it?
 - to make this do something *new*—to add a feature?
 - to make it do something *different*—to change its feature?
 
@@ -126,7 +126,9 @@ There are many tools and techniques we can use to think about these problems. Bu
 As different as those three ideas were, this is the common thread that ties them together:
 
 - From McConnell: moving variable declarations to where they’re used lets us understand the loop by itself, and even extract it: comprehensibility and refactoring!
+
 - From Rust: control over mutability lets us know where changes *can* happen to any given piece of data: comprehension, ability to refactor, and prevention of whole classes of bugs.
+
 - From pure functional programming: purity and referential transparency let us ignore *all* the other functions in the system when we’re understanding this one: again, understanding this function, not introducing bugs in that function by changing this one, being able to extract a function or substitute its result without changing the program.
 
 All of these improve our ability to understand our code—and therefore to work with our code—by making it easier to *reason locally*, to *shrink the radius of what we have to think about*.
@@ -178,8 +180,8 @@ We’ll start by defining a `User` class, which has a handful of properties: the
 ```js
 class User {
   constructor(
-    readonly name: string,
-    readonly age: number,
+    name: string,
+    age: number,
     email: string,
     state: State,
   ) {}
