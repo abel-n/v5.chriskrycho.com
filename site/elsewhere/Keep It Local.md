@@ -1,6 +1,7 @@
 ---
 title: Keep It Local
-subtitle: My EmberConf 2021 talk: on “reasoning about your code.”
+subtitle: >
+  My EmberConf 2021 talk: on “reasoning about your code.”
 summary: >
   What do Steve McConnell’s variable scoping guidelines in Code Complete 2, pure functional programming, the data ownership system in Rust, classical object-oriented programming, the actor model in Erlang, and autotracking in Glimmer all have in common? Every one of them is aiming at the same key ingredient of robust, reliable software: the ability to “reason about your code.” But what does that actually mean?
 date: 2021-03-30T15:00:00-0600
@@ -25,7 +26,7 @@ When I started my first job in software, fresh out of college with a physics deg
 There were a lot of good ideas in <cite>Code Complete 2</code>, but the only one I really remember is: instead of declaring all of your variables at the top of a function (or even the top of a module!)—
 
 ```js
-function doSomething {
+function doSomething(anArg) {
   let i, total = 0, max, min;
   max = getMax(anArg);
   min = max < 100 ? 0 : 100;
@@ -39,7 +40,7 @@ function doSomething {
 —declare them and initialize them right where you are actually going to do something with them, whatever that “something” is.
 
 ```js
-function doSomething {
+function doSomething(anArg) {
   let max = getMax(anArg);
   let min = max < 100 ? 0 : 100;
 
@@ -53,7 +54,7 @@ function doSomething {
 If you embrace this idea, it has all sorts of “knock-on” effects in your code structure, because it forces you to think about where something actually *should* start being used, what its ‘scope’ should be. McConnell points out that if you follow this rule, it’s much easier to make changes later. For example, it’s straightforward to extract the loop into its own function to build `total`:
 
 ```js
-function doSomething {
+function doSomething(anArg) {
   let max = getMax(anArg);
   let min = max < 100 ? 0 : 100;
   let total = getTotal(min, max);
