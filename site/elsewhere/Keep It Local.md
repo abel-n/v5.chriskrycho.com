@@ -21,9 +21,7 @@ tags:
 
 Today, I’m going to start by telling you a story in three parts.
 
-### <cite>Code Complete 2</cite>
-
-***One:***
+<a name='code-complete-2'></a>***One:***
 
 When I started my first job in software, fresh out of college with a physics degree and some really terrible Fortran on my résumé, my new boss handed me two books to work through while I waited on government paperwork. One was Kernighan and Ritchie’s <cite>The C Programming Language</cite>: a classic, but not that interesting for our purposes today. The other Steve McConnell’s <cite>Code Complete 2</cite>.
 
@@ -75,9 +73,7 @@ function getTotal(min, max) {
 
 It’s much harder to see how to do that in the original example. And this is a simple function! For more complicated functions, the problem is much worse.
 
-### Rust
-
-***Two:***
+<a name='rust'></a>***Two:***
 
 In the summer of 2015, I met my favorite programming language: Rust. As someone who had spent a huge chunk of my career up to that point working with Fortran, C, and C++, Rust gave me *lots* of things to like, from its performance characteristics to type system niceties I had recently come to appreciate from learning about Haskell. But one of my very favorite things about it was (and is) its ownership model.
 
@@ -92,9 +88,7 @@ Everything else in the language is a consequence of those rules. And while they�
 
 The key to the whole thing is that it *shrinks the scope where changes can happen*. There is no “shared mutable data” in the system, so you always know exactly where a piece of data might be changing.
 
-### Pure Functional Programming
-
-***Three:***
+<a name='pure-functional-programming'></a>***Three:***
 
 The same year I started learning Rust, I encountered another powerful idea: pure functions. A pure function is a function which:
 
@@ -147,9 +141,7 @@ All of these improve our ability to understand our code—and therefore to work 
 
 Now, if you’re feeling skeptical of my thesis, you might be thinking that I picked the handful of examples that happen to fit my narrative. I’m not! Improving local reasoning may be the closest thing we have to a silver bullet in improving software quality. We've been chasing it for decades; it’s the foundation of several whole programming paradigms.
 
-## Go To Statement Considered Harmful
-
-Let’s start with Edgar Dijkstra’s 1968 paper “Go To Statement Considered Harmful”. He opens by arguing that 
+<a name='go-to-statement-considered-harmful'></a>Let’s start with Edgar Dijkstra’s 1968 paper “Go To Statement Considered Harmful”. He opens by arguing that 
 
 > …our intellectual powers are rather geared to master static relations and… our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the attic program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.
 
@@ -165,19 +157,13 @@ The first task I did on those programs was slowly and laboriously reworking ever
 
 So replacing `GOTO` statements with structured programming  enables “reasoning about your code” by shrinking the radius of thought for *control flow*. Understanding how a conditional behaves no longer requires *global reasoning*, thinking about “the entire flow of the program”. Instead, you can reason *locally*: what an `if` block does can be understood simply by reading that one block.
 
-### Global Mutable State
-
-This is also the foundation of another rule most of us learn early: to avoid shared global variables. Global mutable variables have the same kind of problem as `GOTO` statements: to understand how a given piece of data can change over the life of a program, you have to read *the whole program*. Global variables can seem easier than explicitly passing around data when you’re first authoring a program… but explicitly passing around data means you can actually know where the data can be changed.
+<a name='global-mutable-state'></a>This is also the foundation of another rule most of us learn early: to avoid shared global variables. Global mutable variables have the same kind of problem as `GOTO` statements: to understand how a given piece of data can change over the life of a program, you have to read *the whole program*. Global variables can seem easier than explicitly passing around data when you’re first authoring a program… but explicitly passing around data means you can actually know where the data can be changed.
 
 Even when you still have shared mutable state, reducing the scope of the sharing from *anywhere at any time* to *in these places at these times* shrinks the radius of what you have to think about.
 
-### Encapsulation
+<a name='encapsulation'></a>This is also one reason Object Oriented Programming emphasizes the idea of *encapsulation*. In a purely procedural program, where you just have a piece of data that is handed around and changed willy-nilly, you have to think about every piece of the system which interacts with it—every function you pass it to. If, on the other hand, data is wrapped up in an object which does not expose its internal state, and only exposes a handful of specific ways for outside callers to interact with its state, then even passing it to a function doesn’t allow arbitrary transformations of the data anymore. Only what your public methods allow. Now you can reason about methods! The thinking radius shrinks again.
 
-This is also one reason Object Oriented Programming emphasizes the idea of *encapsulation*. In a purely procedural program, where you just have a piece of data that is handed around and changed willy-nilly, you have to think about every piece of the system which interacts with it—every function you pass it to. If, on the other hand, data is wrapped up in an object which does not expose its internal state, and only exposes a handful of specific ways for outside callers to interact with its state, then even passing it to a function doesn’t allow arbitrary transformations of the data anymore. Only what your public methods allow. Now you can reason about methods! The thinking radius shrinks again.
-
-### <abbr>SOLID</abbr>
-
-And in fact, this goes for *many* of the principles we associate with good object-oriented design. Take the <abbr>SOLID</abbr> principles, for example:
+<a name='solid'></a>And in fact, this goes for *many* of the principles we associate with good object-oriented design. Take the <abbr>SOLID</abbr> principles, for example:
 
 - First, the **Single Responsibility Principle:** This one is perhaps the easiest to connect to the idea of local reasoning. When each object has just one responsibility, then when you’re looking at it you don’t have to think about *other* responsibilities in the system—and when you’re looking at other objects, you don’t have to concern yourselves with the details of how you manage *that* responsibility.
 
@@ -189,13 +175,9 @@ And in fact, this goes for *many* of the principles we associate with good objec
 
 - Finally, the **Dependency Inversion Principle** says that you should not depend on a specific class to handle a responsibility; instead, you should depend on an interface—whether that’s implicit as in JavaScript or Ruby, or explicit as in TypeScript or C♯. This forces you to rely on the intended contract, rather than on implementation details—and it even lets you swap out implementations of the interface, like we often do in tests!
 
-### The Actor Model
+<a name='actor-model'></a>So we’ve seen that structured programming, object-oriented programming,  pure functional programming, even an ownership system like in Rust: all improve local reasoning. So do cross-paradigm approaches like the actor model—especially as you find it in Erlang and Elixir. In the actor model, we build systems out of many small “actors” which can pass messages to each other, and perhaps most importantly which can crash and recover independently from each other. That’s key because it forces you to design each piece of your system to be tolerant of faults elsewhere in the system. But another way of thinking about fault tolerance is: not having to *worry* about faults elsewhere in the system, because *this* actor isn’t coupled to *that* one.
 
-So we’ve seen that structured programming, object-oriented programming,  pure functional programming, even an ownership system like in Rust: all improve local reasoning. So do cross-paradigm approaches like the actor model—especially as you find it in Erlang and Elixir. In the actor model, we build systems out of many small “actors” which can pass messages to each other, and perhaps most importantly which can crash and recover independently from each other. That’s key because it forces you to design each piece of your system to be tolerant of faults elsewhere in the system. But another way of thinking about fault tolerance is: not having to *worry* about faults elsewhere in the system, because *this* actor isn’t coupled to *that* one.
-
-### Types
-
-Another interesting tool for local reasoning is *types*.
+<a name='types'></a>Another interesting tool for local reasoning is *types*.
 
 There was a lesson I learned from Haskell and Elm and F♯ and TypeScript. Let’s look at a small example from TypeScript.
 
@@ -232,9 +214,7 @@ function describe(person: { name: string; age: number }): string {
 
 —then we’ve said that the *only* things we care about are those two fields. `describe` is no longer asking for an `email` and `state` it doesn’t need! This means it doesn’t care how the caller hands it the data. Meanwhile, the caller can still hand it a `User`: it *knows* that that `describe` doesn’t rely on any of the other data from `User`. In both cases, you just get to think about less stuff!
 
-### Autotracking
-
-For our last case study, let’s look at the Glimmer autotracking system. With autotracking, we use the `@tracked` decorator (or, occasionally, the primitives it’s built on) to wire up pieces of data in our system to the reactivity layer: primarily the template layer, but also other reactive functions in our system. Other than some tools for backwards compatibility with classic Ember, autotracking is the *only* way to introduce reactivity into the system.
+<a name='autotracking'></a>For our last case study, let’s look at the Glimmer autotracking system. With autotracking, we use the `@tracked` decorator (or, occasionally, the primitives it’s built on) to wire up pieces of data in our system to the reactivity layer: primarily the template layer, but also other reactive functions in our system. Other than some tools for backwards compatibility with classic Ember, autotracking is the *only* way to introduce reactivity into the system.
 
 This is a significant difference from Ember classic as well as other observer-based systems. For today, I want to emphasize two differences in particular:
 
