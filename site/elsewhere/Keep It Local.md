@@ -177,9 +177,7 @@ Even when you still have shared mutable state, reducing the scope of the sharing
 
 <a name='actor-model'></a>So we’ve seen that structured programming, object-oriented programming,  pure functional programming, even an ownership system like in Rust: all improve local reasoning. So do cross-paradigm approaches like the actor model—especially as you find it in Erlang and Elixir. In the actor model, we build systems out of many small “actors” which can pass messages to each other, and perhaps most importantly which can crash and recover independently from each other. That’s key because it forces you to design each piece of your system to be tolerant of faults elsewhere in the system. But another way of thinking about fault tolerance is: not having to *worry* about faults elsewhere in the system, because *this* actor isn’t coupled to *that* one.
 
-<a name='types'></a>Another interesting tool for local reasoning is *types*.
-
-There was a lesson I learned from Haskell and Elm and F♯ and TypeScript. Let’s look at a small example from TypeScript.
+<a name='types'></a>Another interesting tool for local reasoning is *types*. Let’s look at a small example from TypeScript.
 
 We’ll start by defining a `User` class, which has a handful of properties: the user’s name, age, email, state of residence, etc.:
 
