@@ -25,7 +25,7 @@ Today, I’m going to start by telling you a story in three parts.
 
 When I started my first job in software, fresh out of college with a physics degree and some really terrible Fortran on my résumé, my new boss handed me two books to work through while I waited on government paperwork. One was Kernighan and Ritchie’s <cite>The C Programming Language</cite>: a classic, but not that interesting for our purposes today. The other Steve McConnell’s <cite>Code Complete 2</cite>.
 
-There were a lot of good ideas in <cite>Code Complete 2</code>, but the only one I really remember is: instead of declaring all of your variables at the top of a function (or even the top of a module!)—
+There were a lot of good ideas in <cite>Code Complete 2</code>, but the only one I really remember is: if you have some function, like this `doSomething` function which uses a loop to compute the sum of a range of numbers—
 
 ```js
 function doSomething(anArg) {
@@ -39,7 +39,7 @@ function doSomething(anArg) {
 }
 ```
 
-—declare them and initialize them right where you are actually going to do something with them, whatever that “something” is.
+—then instead of declaring all of your variables at the top of a function (or even the top of a module!), declare them and initialize them right where you are actually going to do something with them, whatever that “something” is. Here, for example, we declare and initialize each of `max` and `min` right where we get their values, and we move `total` down to the loop which calculates it and initialize the counter *in* the loop.
 
 ```js
 function doSomething(anArg) {
