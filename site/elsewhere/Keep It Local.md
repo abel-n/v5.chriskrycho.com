@@ -202,7 +202,7 @@ function describe(user: User): string {
 
 This works! But it has a downside: when I call `describe(someUser)`, I have to assume that `describe` might care about emails and states! What’s more, if `describe` were a bigger or more complicated function, it could end up *accidentally* depending on details of the `User` class. In both cases, the fact that we have a whole `User` means we have to keep more in our heads.
 
-We can make one small change and dramatically improve local reasoning. If `describe` just accepts *any* object which has a `name: string` field and an `age: number` field—
+Now, TypeScript is a *structurally-typed* language, which means it only cares about the *shapes* of the objects you hand it. With `describe` for example, we can work with *any* object which has a `name: string` field and an `age: number` field:
 
 ```js
 function describe(person: { name: string; age: number }): string {
@@ -210,7 +210,12 @@ function describe(person: { name: string; age: number }): string {
 }
 ```
 
-—then we’ve said that the *only* things we care about are those two fields. `describe` is no longer asking for an `email` and `state` it doesn’t need! This means it doesn’t care how the caller hands it the data. Meanwhile, the caller can still hand it a `User`: it *knows* that that `describe` doesn’t rely on any of the other data from `User`. In both cases, you just get to think about less stuff!
+We can still pass a `User` to this, because it has those fields—but we’re no longer *asking* for a whole `User`, with the `email` and `state` fields we don’t use need! And by doing this, we’ve improved our ability to reason locally:
+
+- `describe` doesn’t know anything about `User`s, just a `name` and an `age`
+- callers can pass a `User` or anything else which  meets the contract without worrying about whether other details of `User` will be used
+
+Once again, we’ve decreased coupling; we’ve shunk the radius of thought.
 
 <a name='autotracking'></a>For our last case study, let’s look at the Glimmer autotracking system. With autotracking, we use the `@tracked` decorator (or, occasionally, the primitives it’s built on) to wire up pieces of data in our system to the reactivity layer: primarily the template layer, but also other reactive functions in our system. Other than some tools for backwards compatibility with classic Ember, autotracking is the *only* way to introduce reactivity into the system.
 
