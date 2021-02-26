@@ -25,7 +25,7 @@ Today, I’m going to start by telling you a story in three parts.
 
 When I started my first job in software, fresh out of college with a physics degree and some really terrible Fortran on my résumé, my new boss handed me two books to work through while I waited on government paperwork. One was Kernighan and Ritchie’s <cite>The C Programming Language</cite>: a classic, but not that interesting for our purposes today. The other Steve McConnell’s <cite>Code Complete 2</cite>.
 
-There were a lot of good ideas in <cite>Code Complete 2</code>, but the only one I really remember is: if you have some function, like this `doSomething` function which uses a loop to compute the sum of a range of numbers—
+There were a lot of good ideas in <cite>Code Complete 2</cite>, but the only one I really remember is: if you have some function, like this `doSomething` function which uses a loop to compute the sum of a range of numbers—
 
 ```js
 function doSomething(anArg) {
@@ -139,11 +139,11 @@ All of these improve our ability to understand our code—and therefore to work 
 
 ## Case Studies
 
-Now, if you’re feeling skeptical of my thesis, you might be thinking that I picked the handful of examples that happen to fit my narrative. I’m not! Improving local reasoning may be the closest thing we have to a silver bullet in improving software quality. We've been chasing it for decades; it’s the foundation of several whole programming paradigms.
+Now, if you’re feeling skeptical of my thesis, you might be thinking that I picked the handful of examples that happen to fit my narrative. I’m not! Improving local reasoning may be the closest thing we have to a “holy grail” in improving software quality. We've been chasing it for decades; it’s the foundation of several whole programming paradigms.
 
 <a name='go-to-statement-considered-harmful'></a>Let’s start with Edgar Dijkstra’s 1968 paper “Go To Statement Considered Harmful”. He opens by arguing that 
 
-> …our intellectual powers are rather geared to master static relations and… our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the attic program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.
+> …our intellectual powers are rather geared to master static relations and… our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.
 
 He traces this out in terms of the *coordinates* we use to describe the progress of the program, and specifically of the process the program represents. Those coordinates are textual markers (like line numbers!) or dynamic indexes in contexts like loops.
 
