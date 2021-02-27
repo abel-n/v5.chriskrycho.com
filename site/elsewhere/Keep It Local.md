@@ -251,7 +251,7 @@ So to sum up: one of the key aspects of “reasoning about your code” is the a
 
 —and be confident: first, that I am not breaking things elsewhere; and second, that things elsewhere aren’t going to break this in ways that are invisible here.
 
-And the history of software development, as we’ve seen today in brief, is in no small part a history of gathering techniques and creating tools which allow us to *reason locally*—better; and thereby to reason about our systems—better. That goes from “GOTO Considered Harmful” to affine type systems, and from the actor model in Erlang and Akka to Ember’s autotracking.
+And the history of software development, as we’ve seen today in brief, is in no small part a history of gathering techniques and creating tools which allow us to *reason locally*—better; and thereby to reason about our systems—better. That goes from “Go To Statement Considered Harmful” to affine type systems, and from the actor model in Erlang and Akka to Ember’s autotracking.
 
 There’s no silver bullet here (or anywhere else); this is not the only good idea in software; and this is not the only way to improve our ability to “reason about our software”. But it *is* a profoundly useful idea, as those many connections show. So hopefully, sometime soon, we’ll find yet another way to shrink the radius of thought—to make our software more robust *and* more flexible, easier to write *and* easier to maintain.
 
