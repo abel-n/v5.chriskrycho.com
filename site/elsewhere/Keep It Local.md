@@ -23,7 +23,7 @@ Today, I’m going to start by telling you a story in three parts.
 
 <a name='code-complete-2'></a>***One:***
 
-When I started my first job in software, fresh out of college with a physics degree and some really terrible Fortran on my résumé, my new boss handed me two books to work through while I waited on government paperwork. One was Kernighan and Ritchie’s <cite>The C Programming Language</cite>: a classic, but not that interesting for our purposes today. The other Steve McConnell’s <cite>Code Complete 2</cite>.
+When I started my first job in software, fresh out of college with a physics degree and some really terrible Fortran on my résumé, my new boss handed me two books to work through while I waited on government paperwork. One was Kernighan and Ritchie’s <cite>The C Programming Language</cite>: a classic, and if you get a chance to read it, I commend it to you—but it’s not that interesting for our purposes today. The other was Steve McConnell’s <cite>Code Complete 2</cite>.
 
 There were a lot of good ideas in <cite>Code Complete 2</cite>, but the only one I really remember is: if you have some function, like this `doSomething` function which uses a loop to compute the sum of a range of numbers—
 
@@ -145,6 +145,10 @@ Now, if you’re feeling skeptical of my thesis, you might be thinking that I pi
 
 > …our intellectual powers are rather geared to master static relations and… our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.
 
+Notice here:
+
+> shorten the conceptual gap between the static program and the dynamic process, between the program… in text space… and the process… in time…
+
 He traces this out in terms of the *coordinates* we use to describe the progress of the program, and specifically of the process the program represents. Those coordinates are textual markers (like line numbers!) or dynamic indexes in contexts like loops.
 
 But, Dijkstra points out, no matter what *other* systems we have in place to help us reason about our program—variable names, control structures like `if` blocks and `while` loops, etc.—if we use `GOTO` statements throughout our program, those other tools break down. What does a variable represent? If you have no `GOTO` statements, you can know that it represents just exactly what it would appear to as you first read through the section. If you include `GOTO` in your toolbox, though, the meaning at any given point becomes much less clear, since it can be the result of other things happening somewhere else in the program.
@@ -163,7 +167,7 @@ Even when you still have shared mutable state, reducing the scope of the sharing
 
 <a name='encapsulation'></a>This is also one reason Object Oriented Programming emphasizes the idea of *encapsulation*. In a purely procedural program, where you just have a piece of data that is handed around and changed willy-nilly, you have to think about every piece of the system which interacts with it—every function you pass it to. If, on the other hand, data is wrapped up in an object which does not expose its internal state, and only exposes a handful of specific ways for outside callers to interact with its state, then even passing it to a function doesn’t allow arbitrary transformations of the data anymore. Only what your public methods allow. Now you can reason about methods! The thinking radius shrinks again.
 
-<a name='solid'></a>And in fact, this goes for *many* of the principles we associate with good object-oriented design. Take the <abbr>SOLID</abbr> principles, for example:
+<a name='solid'></a>And in fact, this goes for *many* of the principles we associate with good object-oriented design. Take the <abbr>SOLID</abbr> principles, for example, which are all about how we can design interfaces to improve maintainability:
 
 - First, the **Single Responsibility Principle:** This one is perhaps the easiest to connect to the idea of local reasoning. When each object has just one responsibility, then when you’re looking at it you don’t have to think about *other* responsibilities in the system—and when you’re looking at other objects, you don’t have to concern yourselves with the details of how you manage *that* responsibility.
 
@@ -221,7 +225,7 @@ Once again, we’ve decreased coupling; we’ve shunk the radius of thought.
 
 This is a significant difference from Ember classic as well as other observer-based systems. For today, I want to emphasize two differences in particular:
 
-1. First, in Ember classic, the combination of dependent key observation and two-way binding meant anyone could *make* any piece of data in the system reactive. This made it impossible to know where a given piece of data was updated without reading *all* of the code which referred to the object at all. It also meant that reactivity was not a function of the data, but a function of who *used* the data, and how. I would say that this is the definition of defeating local reasoning, except that the second piece was even *worse* for local reasoning. 
+1. First, in Ember classic, the combination of dependent key observation and two-way binding meant anyone could *make* any piece of data in the system reactive. This made it impossible to know where a given piece of data was updated without reading *all* of the code which referred to the object at all. It also meant that reactivity was not a function of the data, but a function of who *used* the data, and how. I would say that this is the definition of defeating local reasoning about reactivity, except that the second piece was even *worse*!
 
 2. That second problem was observers. An observer, like a computed property, could be triggered by changes to *any* data in the system… but then it could also go trigger *further* updates to state, or perform arbitrary tasks, or do… anything. With Ember’s classic observers system, it was impossible to know what all you were kicking off with a single `this.set`. Infamously, you could pretty easily get yourself into infinite loops where one `set` could trigger an observer which triggered another `set` and so on forever. What’s more, this wasn’t limited to explicit use of observers: the classic lifecycle hooks like `didReceiveAttrs` had exactly the same kinds of issues. And again: the only way to know was to read through every single place that the data was used in any way (direct or indirect). Good luck! 
 
