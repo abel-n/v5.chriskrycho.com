@@ -118,6 +118,7 @@ Some of them are the things we typically think about as “computer science” r
 But there are others, too. For example, *What code do I have to change—*
 
 - if there is a bug in it?
+- if I need to improve its performance—including by tweaks around <abbr title="computer science">CS</abbr> reasoning?
 - to make this do something *new*—to add a feature?
 - to make it do something *different*—to change its feature?
 
