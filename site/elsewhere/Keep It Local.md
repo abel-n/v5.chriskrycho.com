@@ -255,4 +255,6 @@ And the history of software development, as we’ve seen today in brief, is in n
 
 There’s no silver bullet here (or anywhere else); this is not the only good idea in software; and this is not the only way to improve our ability to “reason about our software”. But it *is* a profoundly useful idea, as those many connections show. So hopefully, sometime soon, we’ll find yet another way to shrink the radius of thought—to make our software more robust *and* more flexible, easier to write *and* easier to maintain.
 
+Keep it local!
+
 Thank you!
