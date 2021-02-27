@@ -39,7 +39,7 @@ function doSomething(anArg) {
 }
 ```
 
-—then instead of declaring all of your variables at the top of a function (or even the top of a module!), declare them and initialize them right where you are actually going to do something with them, whatever that “something” is. Here, for example, we declare and initialize each of `max` and `min` right where we get their values, and we move `total` down to the loop which calculates it and initialize the counter *in* the loop.
+—then instead of declaring all of your variables at the top of a function, as I have here with `i` and `total` and `max` and `min`, declare them and initialize them right where you are actually going to do something with them, whatever that “something” is. Here, for example, we declare and initialize each of `max` and `min` right where we get their values, and we move `total` down to the loop which calculates it and initialize the counter *in* the loop.
 
 ```js
 function doSomething(anArg) {
