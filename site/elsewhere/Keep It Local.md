@@ -80,9 +80,9 @@ In the summer of 2015, I met my favorite programming language: Rust. As someone 
 Rust’s ownership system—in type system terms, its use of “affine types”—is the secret sauce which lets it gives you both memory safety like you would get in a language like JavaScript or C♯, and performance like C or C++. This ownership model consists of a couple simple rules enforced by the compiler:
 
 1. A piece of data always has one *owner*.
-2. Data can be read-only, or it can allow writes.
-	- If it’s read-only, it can be “lent out” (what Rust calls “borrowed”) to any number of functions and types which can read it.
-	- If it’s write-only, there can only be one reference in the system: no reads, and only one writer.
+2. There is no shared mutable data in the system. It can be shared, or it can be mutable, but not both.
+	- read-only data can be “lent out” (what Rust calls “borrowed”) to any number of functions and types which can read it
+	- write-able data can only have one reference to it in the system: no reads, and only one writer.
 
 Everything else in the language is a consequence of those rules. And while they’re conceptually simple, it’s not always easy to get your data into a shape where they cleanly follow those rules! But when you *do*, you end up with the amazing performance you want… even though you’re writing a language that mostly looks and feels like any other high-level modern language.
 
@@ -92,19 +92,27 @@ The key to the whole thing is that it *shrinks the scope where changes can happe
 
 The same year I started learning Rust, I encountered another powerful idea: pure functions. A pure function is a function which:
 
-- doesn’t *use* any values in the system other than its arguments—including global data or even doing things like writing to the console
-- doesn’t mutate any values in the system, period
-- doesn’t have any internal state.
+- only has access to its arguments—which means it:
+    - cannot access global state
+    - does not have access to *global* functions like `console.log`
 
-In short: it’s just a straight line from input to output. “Purity” here is like in chemistry, where a pure solution has nothing extra added in besides the ingredients you specified.
+    It can receive all sorts of things as arguments, including other functions, and it can *return* all sorts of things, including other functions—but its arguments are the *only* things it can work with.
 
-Since pure functions don’t have any state, and since they don’t touch anything but their arguments, they give you the same results every time. So when you’re looking at a given function invocation, if it’s a *pure* function, you don’t have to think about anything anywhere else in the system to figure out what that function will do.
+- cannot *mutate* values in the system, period
+    - not even its own arguments: it can only  hand back a copy with some transformation applied
+    - not global state… because it doesn’t have access to it!
 
-You also know that when you hand a pure function some data, it won’t mutate that data, because it can’t: then it wouldn’t be pure. It can only hand back a copy with some transformation applied.
+“Purity” here is like in chemistry, where a pure solution has nothing extra added in besides the ingredients you specified.
 
-Last but not least, you get a property called ‘referential transparency’, which just means that you could just replace calling the function with the value the function returns, and the program would behave exactly the same way. Think of it like math: anywhere you have “3 + 4” in any equation, you can replace it with “7” and it’s the same thing.
+This has a number of benefits:
 
-When you’re using a language like Haskell or Elm or Idris which enforces functional purity *everywhere*, every single function in your program has these properties. Functional programming enthusiasts often talk about how purity lets you “reason about your code,” and I think they’re right. But what is “reasoning about your code?”
+- Pure functions are stateless, and they never *directly* affect the rest of the system. In short: it’s just a straight line from input to output: given the same arguments, pure functions give you the same results—every time. So when you’re looking at a given function invocation, if it’s a *pure* function, you don’t have to think about anything anywhere else in the system to figure out what that function will do. You don’t even have to look at *local* state, because it doesn’t have any!
+
+- You don’t worry about mutation anymore, because there is none!
+
+- Last but not least, you get a property called ‘referential transparency’, which just means that you could just replace calling the function with the value the function returns, and the program would behave exactly the same way. Think of it like math: anywhere you have “3 + 4” in any equation, you can replace it with “7” and it’s the same thing.
+
+When you’re using a language like Haskell or Elm or Idris which enforces functional purity *everywhere*, every single function in your program has these properties. Now, you might also wonder “But how do you *do* anything with that?” and that’s a good question, but suffice it to say there are answers, which they involve isolating those *effects* on the rest of the world. For today, though, I want to focus on a claim functional programming enthusiasts often make: that purity lets you “reason about your code” because it gives you these nice properties (and more). I think they’re right! But what is “reasoning about your code?”
 
 ## Local Reasoning
 
