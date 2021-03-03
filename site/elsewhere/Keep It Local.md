@@ -21,7 +21,7 @@ tags:
 
 Today, I’m going to start by telling you a story in three parts.
 
-<a name='code-complete-2'></a>***One:***
+<a name='code-complete-2'></a>***Part one:***
 
 When I started my first job in software, fresh out of college with a physics degree and some really terrible Fortran on my résumé, my new boss handed me two books to work through while I waited on government paperwork. One was Kernighan and Ritchie’s <cite>The C Programming Language</cite>: a classic, and if you get a chance to read it, I commend it to you—but it’s not that interesting for our purposes today. The other was Steve McConnell’s <cite>Code Complete 2</cite>.
 
@@ -73,7 +73,7 @@ function getTotal(min, max) {
 
 It’s much harder to see how to do that in the original example. And this is a simple function! For more complicated functions, the problem is much worse.
 
-<a name='rust'></a>***Two:***
+<a name='rust'></a>***Part two*** of my story:
 
 In the summer of 2015, I met my favorite programming language: Rust. As someone who had spent a huge chunk of my career up to that point working with Fortran, C, and C++, Rust gave me *lots* of things to like, from its performance characteristics to type system niceties I had recently come to appreciate from learning about Haskell. But one of my very favorite things about it was (and is) its ownership model.
 
@@ -88,7 +88,7 @@ Everything else in the language is a consequence of those rules. And while they�
 
 The key to the whole thing is that it *shrinks the scope where changes can happen*. There is no “shared mutable data” in the system, so you always know exactly where a piece of data might be changing.
 
-<a name='pure-functional-programming'></a>***Three:***
+<a name='pure-functional-programming'></a>***Part three*** of my story:
 
 The same year I started learning Rust, I encountered another powerful idea: pure functions. A pure function is a function which:
 
