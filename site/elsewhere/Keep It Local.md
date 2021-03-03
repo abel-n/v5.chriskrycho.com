@@ -150,6 +150,8 @@ All of these improve our ability to understand our code—and therefore to work 
 
 Now, if you’re feeling skeptical of my thesis, you might be thinking that I picked the handful of examples that happen to fit my narrative. I’m not! Improving local reasoning may be the closest thing we have to a “holy grail” in improving software quality. We've been chasing it for decades; it’s the foundation of several whole programming paradigms.
 
+### Structured Programming
+
 <a name='go-to-statement-considered-harmful'></a>Let’s start with Edgar Dijkstra’s 1968 paper “Go To Statement Considered Harmful”. He opens by arguing that 
 
 > …our intellectual powers are rather geared to master static relations and… our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.
@@ -174,6 +176,8 @@ So replacing `GOTO` statements with structured programming  enables “reasoning
 
 Even when you still have shared mutable state, reducing the scope of the sharing from *anywhere at any time* to *in these places at these times* shrinks the radius of what you have to think about.
 
+### Object-Oriented Programming
+
 <a name='encapsulation'></a>This is also one reason Object Oriented Programming emphasizes the idea of *encapsulation*. In a purely procedural program, where you just have a piece of data that is handed around and changed willy-nilly, you have to think about every piece of the system which interacts with it—every function you pass it to. If, on the other hand, data is wrapped up in an object which does not expose its internal state, and only exposes a handful of specific ways for outside callers to interact with its state, then even passing it to a function doesn’t allow arbitrary transformations of the data anymore. Only what your public methods allow. Now you can reason about methods! The thinking radius shrinks again.
 
 <a name='solid'></a>And in fact, this goes for *many* of the principles we associate with good object-oriented design. Take the <abbr>SOLID</abbr> principles, for example, which are all about how we can design interfaces to improve maintainability:
@@ -187,6 +191,8 @@ Even when you still have shared mutable state, reducing the scope of the sharing
 - The **Interface Segregation Principle** says you should have lots of small interfaces specific to things which use them, instead of one giant blob interface which handles every possible interaction. If I only need one method, why should I have to care about 235 other methods other clients might need? Interface segregation means I *don’t* have to care about them!
 
 - Finally, the **Dependency Inversion Principle** says that you should not depend on a specific class to handle a responsibility; instead, you should depend on an interface—whether that’s implicit as in JavaScript or Ruby, or explicit as in TypeScript or C♯. This forces you to rely on the intended contract, rather than on implementation details—and it even lets you swap out implementations of the interface, like we often do in tests!
+
+### Other Disciplines
 
 <a name='actor-model'></a>So we’ve seen that structured programming, object-oriented programming,  pure functional programming, even an ownership system like in Rust: all improve local reasoning. So do cross-paradigm approaches like the actor model—especially as you find it in Erlang and Elixir. In the actor model, we build systems out of many small “actors” which can pass messages to each other, and perhaps most importantly which can crash and recover independently from each other. That’s key because it forces you to design each piece of your system to be tolerant of faults elsewhere in the system. But another way of thinking about fault tolerance is: not having to *worry* about faults elsewhere in the system, because *this* actor isn’t coupled to *that* one.
 
@@ -229,6 +235,8 @@ We can still pass a `User` to this, because it has those fields—but we’re no
 - callers can pass a `User` or anything else which  meets the contract without worrying about whether other details of `User` will be used
 
 Once again, we’ve decreased coupling; we’ve shunk the radius of thought.
+
+### Autotracking
 
 <a name='autotracking'></a>For our last case study, let’s look at the Glimmer autotracking system. With autotracking, we use the `@tracked` decorator (or, occasionally, the primitives it’s built on) to wire up pieces of data in our system to the reactivity layer: primarily the template layer, but also other reactive functions in our system. Other than some tools for backwards compatibility with classic Ember, autotracking is the *only* way to introduce reactivity into the system.
 
