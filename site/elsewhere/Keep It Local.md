@@ -75,12 +75,14 @@ It’s much harder to see how to do that in the original example. And this is a 
 
 <a name='rust'></a>***Part two*** of my story:
 
-In the summer of 2015, I met my favorite programming language: Rust. As someone who had spent a huge chunk of my career up to that point working with Fortran, C, and C++, Rust gave me *lots* of things to like, from its performance characteristics to type system niceties I had recently come to appreciate from learning about Haskell. But one of my very favorite things about it was (and is) its ownership model.
+In the summer of 2015, I met my favorite programming language: Rust. As someone who had spent a huge chunk of my career working with Fortran, C, and C++, I loved its performance. But I also really liked its type system, which gave me niceties from functional programming languages like Haskell (and we’ll come back to that). But one of my very favorite things about it was (and is) its ownership model.
 
-Rust’s ownership system—in type system terms, its use of “affine types”—is the secret sauce which lets it gives you both memory safety like you would get in a language like JavaScript or C♯, and performance like C or C++. This ownership model consists of a couple simple rules enforced by the compiler:
+Rust’s ownership system—in type system terms, its use of “affine types”—is its secret sauce. It gives you memory safety like you would get in a language like JavaScript or C♯ *and* performance like C or C++.
+
+This ownership model consists of a couple simple rules enforced by the compiler:
 
 1. A piece of data always has one *owner*.
-2. There is no shared mutable data in the system. It can be shared, or it can be mutable, but not both.
+2. There is *no shared mutable data* in the system. It can be shared, or it can be mutable, but not both.
 	- read-only data can be “lent out” (what Rust calls “borrowed”) to any number of functions and types which can read it
 	- write-able data can only have one reference to it in the system: no reads, and only one writer.
 
@@ -90,7 +92,9 @@ The key to the whole thing is that it *shrinks the scope where changes can happe
 
 <a name='pure-functional-programming'></a>***Part three*** of my story:
 
-The same year I started learning Rust, I encountered another powerful idea: pure functions. A pure function is a function which:
+The same year I started learning Rust, I encountered another powerful idea: *pure functional programming*.
+
+A pure function is a function which:
 
 - only has access to its arguments—which means it:
     - cannot access global state
@@ -108,22 +112,22 @@ This has a number of benefits:
 
 - Pure functions are stateless, and they never *directly* affect the rest of the system. In short: it’s just a straight line from input to output: given the same arguments, pure functions give you the same results—every time. So when you’re looking at a given function invocation, if it’s a *pure* function, you don’t have to think about anything anywhere else in the system to figure out what that function will do. You don’t even have to look at *local* state, because it doesn’t have any!
 
-- You don’t worry about mutation anymore, because there is none!
+- You don’t think about mutation anymore *at all*, because there is none!
 
 - Last but not least, you get a property called ‘referential transparency’, which just means that you could just replace calling the function with the value the function returns, and the program would behave exactly the same way. Think of it like math: anywhere you have “3 + 4” in any equation, you can replace it with “7” and it’s the same thing.
 
-When you’re using a language like Haskell or Elm or Idris which enforces functional purity *everywhere*, every single function in your program has these properties. Now, you might also wonder “But how do you *do* anything with that?” and that’s a good question, but suffice it to say there are answers, which they involve isolating those *effects* on the rest of the world. For today, though, I want to focus on a claim functional programming enthusiasts often make: that purity lets you “reason about your code” because it gives you these nice properties (and more). I think they’re right! But what is “reasoning about your code?”
+The result is that when you work on any given function, you can think about *just that function*! And when you’re using a language like Haskell or Elm or Idris which enforces functional purity *everywhere*, that applies to every single function in your program. Now, you might also wonder “But how do you *do* anything with that?” and that’s a good question, but suffice it to say there are answers, which they involve isolating those *effects* on the rest of the world. For today, though, I want to focus on a claim functional programming enthusiasts often make: that purity lets you “reason about your code” because it gives you these nice properties (and more). I think they’re right! But what is “reasoning about your code?”
 
 ## Local Reasoning
 
-“Reasoning about your code” is understanding what it will do and how it will do it. And there are many things we want to understand about the code we write.
+“Reasoning about your code” is understanding *what it will do* and *how it will do it*. And there are many things we want to understand about the code we write.
 
 Some of them are the things we typically think about as “computer science” reasoning:
 
 - What’s the algorithmic complexity—and therefore how will it handle large amounts of data?
 - How much memory does it use—and so likewise, how will it scale to large amounts of data?
 
-But there are others, too. For example, *What code do I have to change—*
+But there are others, too. For example, *what code do I have to change—*
 
 - if there is a bug in it?
 - if I need to improve its performance—including by tweaks around <abbr title="computer science">CS</abbr> reasoning?
@@ -138,7 +142,7 @@ There are many tools and techniques we can use to think about these problems. Bu
 
 As different as those three ideas were, this is the common thread that ties them together:
 
-- From McConnell: moving variable declarations to where they’re used lets us understand the loop by itself, and even extract it: comprehensibility and refactoring!
+- From McConnell and <cite>Code Complete 2</cite>: moving variable declarations to where they’re used lets us understand the loop by itself, and even extract it: comprehensibility and refactoring!
 
 - From Rust: control over mutability lets us know where changes *can* happen to any given piece of data: comprehension, ability to refactor, and prevention of whole classes of bugs.
 
@@ -156,17 +160,17 @@ Now, if you’re feeling skeptical of my thesis, you might be thinking that I pi
 
 > …our intellectual powers are rather geared to master static relations and… our powers to visualize processes evolving in time are relatively poorly developed. For that reason we should do (as wise programmers aware of our limitations) our utmost to shorten the conceptual gap between the static program and the dynamic process, to make the correspondence between the program (spread out in text space) and the process (spread out in time) as trivial as possible.
 
-Notice here:
+Notice here—this is exactly the same idea as *local reasoning*! We’re trying to…
 
 > shorten the conceptual gap between the static program and the dynamic process, between the program… in text space… and the process… in time…
 
 He traces this out in terms of the *coordinates* we use to describe the progress of the program, and specifically of the process the program represents. Those coordinates are textual markers (like line numbers!) or dynamic indexes in contexts like loops.
 
-But, Dijkstra points out, no matter what *other* systems we have in place to help us reason about our program—variable names, control structures like `if` blocks and `while` loops, etc.—if we use `GOTO` statements throughout our program, those other tools break down. What does a variable represent? If you have no `GOTO` statements, you can know that it represents just exactly what it would appear to as you first read through the section. If you include `GOTO` in your toolbox, though, the meaning at any given point becomes much less clear, since it can be the result of other things happening somewhere else in the program.
+But, Dijkstra points out, no matter what *other* systems we have in place to help us reason about our program—variable names, control structures like `if` blocks and `while` loops, etc.—if we use `GOTO` statements throughout our program, those other tools break down.
 
-If a `GOTO` lands you in the middle of a while loop, what is the value of the loop’s control index? Well… it depends on *everything else* that has happened in the flow of the program that led to that particular `GOTO`.  In other words, `GOTO` is a problem precisely because it completely defeats the other tools we have to make it possible to *reason locally*.
+What is the value of a while loop’s control index? Well, if you include `GOTO` in your toolbox, it depends on *everything else* that has happened in the flow of the program that led to that point—possibly including things *after* that loop in the text of the program! But if you *don’t* have `GOTO` statements, you can know that it represents exactly what it looks like when you read it. In other words, `GOTO` is a problem precisely because it completely defeats the other tools we have to make it possible to *reason locally*.
 
-This isn’t a merely theoretical or purely historical concern for me. I mentioned earlier that I spent the years before I discovered Rust writing a mix of programming languages including Fortran and C. Several of those Fortran and C codebases made liberal use of `GOTO`, and, well, spoilers: Dijkstra was right: it was incredibly difficult to “find a meaningful set of coordinates in which to describe the process progress.”
+This isn’t a merely theoretical or purely historical concern for me—something from back in the 1960s. I mentioned earlier that I spent the years before I discovered Rust writing a mix of programming languages including Fortran and C. Several of those Fortran and C codebases made liberal use of `GOTO`, and, well, spoilers: Dijkstra was right: it was incredibly difficult to “find a meaningful set of coordinates in which to describe the process progress.”
 
 The first task I did on those programs was slowly and laboriously reworking every one of those `GOTO` statements into actual functions and loops and so on. Doing that was extremely difficult and extremely error-prone. Sometimes I had to understand literally the whole program to be able to make any changes at all! But once I had done that hard work and gotten rid of `GOTO`, I could make further changes and improvements much more easily—because I knew much better what could cause changes *right here*, and what could *not*.
 
