@@ -4,6 +4,10 @@ subtitle: >
   My EmberConf 2021 talk: on “reasoning about your code.”
 summary: >
   What do Steve McConnell’s variable scoping guidelines in Code Complete 2, pure functional programming, the data ownership system in Rust, classical object-oriented programming, the actor model in Erlang, and autotracking in Glimmer all have in common? Every one of them is aiming at the same key ingredient of robust, reliable software: the ability to “reason about your code.” But what does that actually mean?
+qualifiers:
+  audience: >
+    Anyone interested in the theory and craft of software development.
+image: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-m.jpeg
 date: 2021-03-30T15:00:00-0600
 tags:
   - talks
@@ -19,13 +23,17 @@ tags:
 
 ## Introduction
 
+![][1]
+
 Today, I’m going to start by telling you a story in three parts.
 
 <a name='code-complete-2'></a>***Part one:***
 
 When I started my first job in software, fresh out of college with a physics degree and some really terrible Fortran on my résumé, my new boss handed me two books to work through while I waited on government paperwork. One was Kernighan and Ritchie’s <cite>The C Programming Language</cite>: a classic, and if you get a chance to read it, I commend it to you—but it’s not that interesting for our purposes today. The other was Steve McConnell’s <cite>Code Complete 2</cite>.
 
-There were a lot of good ideas in <cite>Code Complete 2</cite>, but the only one I really remember is: if you have some function, like this `doSomething` function which uses a loop to compute the sum of a range of numbers—
+![][2]
+
+There were a lot of good ideas in <cite>Code Complete 2</cite>, but the one I want to focus on today is: if you have some function, like this `doSomething` function which uses a loop to compute the sum of a range of numbers—
 
 ```js
 function doSomething(anArg) {
@@ -75,6 +83,8 @@ It’s much harder to see how to do that in the original example. And this is a 
 
 <a name='rust'></a>***Part two*** of my story:
 
+![][7]
+
 In the summer of 2015, I met my favorite programming language: Rust. As someone who had spent a huge chunk of my career working with Fortran, C, and C++, I loved its performance. But I also really liked its type system, which gave me niceties from functional programming languages like Haskell (and we’ll come back to that). But one of my very favorite things about it was (and is) its ownership model.
 
 Rust’s ownership system—in type system terms, its use of “affine types”—is its secret sauce. It gives you memory safety like you would get in a language like JavaScript or C♯ *and* performance like C or C++.
@@ -86,11 +96,15 @@ This ownership model consists of a couple simple rules enforced by the compiler:
 	- read-only data can be “lent out” (what Rust calls “borrowed”) to any number of functions and types which can read it
 	- write-able data can only have one reference to it in the system: no reads, and only one writer.
 
+![][8]
+
 Everything else in the language is a consequence of those rules. And while they’re conceptually simple, it’s not always easy to get your data into a shape where they cleanly follow those rules! But when you *do*, you end up with the amazing performance you want… even though you’re writing a language that mostly looks and feels like any other high-level modern language.
 
 The key to the whole thing is that it *shrinks the scope where changes can happen*. There is no “shared mutable data” in the system, so you always know exactly where a piece of data might be changing.
 
 <a name='pure-functional-programming'></a>***Part three*** of my story:
+
+![][9]
 
 The same year I started learning Rust, I encountered another powerful idea: *pure functional programming*.
 
@@ -108,6 +122,8 @@ A pure function is a function which:
 
 “Purity” here is like in chemistry, where a pure solution has nothing extra added in besides the ingredients you specified.
 
+![][10]
+
 This has a number of benefits:
 
 - Pure functions are stateless, and they never *directly* affect the rest of the system. In short: it’s just a straight line from input to output: given the same arguments, pure functions give you the same results—every time. So when you’re looking at a given function invocation, if it’s a *pure* function, you don’t have to think about anything anywhere else in the system to figure out what that function will do. You don’t even have to look at *local* state, because it doesn’t have any!
@@ -116,7 +132,11 @@ This has a number of benefits:
 
 - Last but not least, you get a property called ‘referential transparency’, which just means that you could just replace calling the function with the value the function returns, and the program would behave exactly the same way. Think of it like math: anywhere you have “3 + 4” in any equation, you can replace it with “7” and it’s the same thing.
 
+![][11]
+
 The result is that when you work on any given function, you can think about *just that function*! And when you’re using a language like Haskell or Elm or Idris which enforces functional purity *everywhere*, that applies to every single function in your program. Now, you might also wonder “But how do you *do* anything with that?” and that’s a good question, but suffice it to say there are answers, which they involve isolating those *effects* on the rest of the world. For today, though, I want to focus on a claim functional programming enthusiasts often make: that purity lets you “reason about your code” because it gives you these nice properties (and more). I think they’re right! But what is “reasoning about your code?”
+
+![][12]
 
 ## Local Reasoning
 
@@ -127,6 +147,8 @@ Some of them are the things we typically think about as “computer science” r
 - What’s the algorithmic complexity—and therefore how will it handle large amounts of data?
 - How much memory does it use—and so likewise, how will it scale to large amounts of data?
 
+![][13]
+
 But there are others, too. For example, *what code do I have to change—*
 
 - if there is a bug in it?
@@ -134,11 +156,23 @@ But there are others, too. For example, *what code do I have to change—*
 - to make this do something *new*—to add a feature?
 - to make it do something *different*—to change its feature?
 
+![][14]
+
 And most importantly:
 
 - Does this code work? Does it solve the problem it’s supposed to solve?
 
-There are many tools and techniques we can use to think about these problems. But my thesis today is that if we want to understand our code along *any* axis, if we want to be able to answer any of those kinds of questions about our code, it helps enormously if we can reason *locally*. Or, as my wife put it when I described this idea to her: they let you *shrink the radius of things you have to think about*.
+![][15]
+
+There are many tools and techniques we can use to think about these problems. But my thesis today is that if we want to understand our code along *any* axis, if we want to be able to answer any of those kinds of questions about our code, it helps enormously if we can reason *locally*.
+
+![][16]
+
+Or, as my wife put it when I described this idea to her: they let you *shrink the radius of things you have to think about*.
+
+![][17]
+
+![][18]
 
 As different as those three ideas were, this is the common thread that ties them together:
 
@@ -148,11 +182,17 @@ As different as those three ideas were, this is the common thread that ties them
 
 - From pure functional programming: purity and referential transparency let us ignore *all* the other functions in the system when we’re understanding this one: again, understanding this function, not introducing bugs in that function by changing this one, being able to extract a function or substitute its result without changing the program.
 
+![][25]
+
 All of these improve our ability to understand our code—and therefore to work with our code—by making it easier to *reason locally*, to *shrink the radius of what we have to think about*.
+
+![][26]
 
 ## Case Studies
 
 Now, if you’re feeling skeptical of my thesis, you might be thinking that I picked the handful of examples that happen to fit my narrative. I’m not! Improving local reasoning may be the closest thing we have to a “holy grail” in improving software quality. We've been chasing it for decades; it’s the foundation of several whole programming paradigms.
+
+![][26]
 
 ### Structured Programming
 
@@ -278,3 +318,32 @@ There’s no silver bullet here (or anywhere else); this is not the only good id
 Keep it local!
 
 Thank you!
+
+[1]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-1.jpeg "slide 1"
+[2]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-2.jpeg "slide 2"
+[3]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-3.jpeg "slide 3"
+[4]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-4.jpeg "slide 4"
+[5]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-5.jpeg "slide 5"
+[6]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-6.jpeg "slide 6"
+[7]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-7.jpeg "slide 7"
+[8]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-8.jpeg "slide 8"
+[9]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-9.jpeg "slide 9"
+[10]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-10.jpeg "slide 10"
+[11]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-11.jpeg "slide 11"
+[12]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-12.jpeg "slide 12"
+[13]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-13.jpeg "slide 13"
+[14]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-14.jpeg "slide 14"
+[15]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-15.jpeg "slide 15"
+[16]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-16.jpeg "slide 16"
+[17]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-17.jpeg "slide 17"
+[18]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-18.jpeg "slide 18"
+[19]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-19.jpeg "slide 19"
+[20]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-20.jpeg "slide 20"
+[21]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-21.jpeg "slide 21"
+[22]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-22.jpeg "slide 22"
+[23]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-23.jpeg "slide 23"
+[24]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-24.jpeg "slide 24"
+[25]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-25.jpeg "slide 25"
+[26]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-26.jpeg "slide 26"
+[27]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-27.jpeg "slide 27"
+[28]: https://cdn.chriskrycho.com/file/chriskrycho-com/images/talks/keep-it-local-emberconf-2021/slide-28.jpeg "slide 28"
