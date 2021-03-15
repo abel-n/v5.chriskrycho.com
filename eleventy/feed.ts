@@ -1,6 +1,6 @@
 import stripTags from 'striptags';
 
-import { Dict, EleventyClass, Item } from '../types/eleventy';
+import { EleventyClass, Item } from '../types/eleventy';
 import JsonFeed, { FeedItem } from '../types/json-feed';
 import absoluteUrl from './absolute-url';
 import { canParseDate } from './date-time';
@@ -10,6 +10,8 @@ import toCollection from './to-collection';
 import markdown from './markdown';
 import localeDate from './locale-date';
 import { DateTime } from 'luxon';
+import { Book, isBook } from './data/book';
+import { Series } from './data/series';
 
 type BuildInfo = typeof import('../site/_data/build');
 type SiteConfig = typeof import('../site/_data/config');
@@ -17,22 +19,6 @@ type SiteConfig = typeof import('../site/_data/config');
 /** Defensive function in case handed bad data */
 const optionalString = (value: unknown): string | undefined =>
    typeof value === 'string' ? value : undefined;
-
-interface Book {
-   title: string;
-   author: string;
-   year?: number | string;
-   review?: {
-      rating:
-         | 'Required'
-         | 'Recommended'
-         | 'Recommended With Qualifications'
-         | 'Not Recommended';
-      summary: string;
-   };
-   cover?: string;
-   link?: string;
-}
 
 /** Extending the base Eleventy item with my own data */
 declare module '../types/eleventy' {
@@ -59,38 +45,8 @@ declare module '../types/eleventy' {
        * the slug changes.
        */
       feedId?: string;
+      series?: Series;
    }
-}
-
-type TypeOf =
-   | 'undefined'
-   | 'object'
-   | 'boolean'
-   | 'number'
-   | 'bigint'
-   | 'string'
-   | 'symbol'
-   | 'function';
-
-function hasType<T extends TypeOf>(type: T, item: unknown): item is T {
-   return typeof item === type;
-}
-
-function isBook(maybeBook: unknown): maybeBook is Book {
-   if (typeof maybeBook !== 'object' || !maybeBook) {
-      return false;
-   }
-
-   const maybe = maybeBook as Dict<unknown>;
-
-   return (
-      typeof maybe.title === 'string' &&
-      typeof maybe.author === 'string' &&
-      (hasType('number', maybe.year) || hasType('string', maybe.year)) &&
-      hasType('object', maybe.review) &&
-      hasType('string', maybe.cover) &&
-      hasType('string', maybe.link)
-   );
 }
 
 function describe(book: Book): string {
