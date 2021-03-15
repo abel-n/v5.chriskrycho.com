@@ -8,6 +8,12 @@
       {{formattedTitle}}
       {%if link %}<span class='item-title-arrow'>↩︎</span>{% endif %}
    </h2>
+   {% elif type == 'series' %}
+   <h2 class='item-title'>
+      <span class='item-title__series'>Series:</span>
+      <span class='item-title__series-name'>{{formattedTitle}}</span>
+      {%if link %}<span class='item-title-arrow'>↩︎</span>{% endif %}
+   </h2>
    {% else %}
    <h1 class='item-title'>
       {{formattedTitle}}

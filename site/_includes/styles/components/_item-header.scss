@@ -18,6 +18,13 @@
       }
       color: var(--h1-fg);
       position: relative;
+
+      &__series {
+         font-weight: 300;
+         letter-spacing: 1px;
+         font-variant: all-small-caps;
+         font-size: #{ms(2)};
+      }
    }
 
    .item-subtitle {

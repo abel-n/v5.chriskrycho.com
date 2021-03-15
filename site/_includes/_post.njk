@@ -7,6 +7,27 @@
 {% endblock header %}
 
 {% block content %}
+{%- if series -%}
+<div class='callout'>
+   {% set part %}
+      {% if series.part == 0 %}
+         the introduction to
+      {% else %}
+         Part {{series.part}} in
+      {% endif %}
+   {% endset %}
+
+   This post is {{part}} the series
+      “{{series.title}}”
+   {%- endif -%}
+   .
+   {% if series.link %}
+      You’ll find the rest of the series <a href="{{series.link}}">here</a>!
+   {% endif %}
+</div>
+{%- endif -%}
+
+
 {% if qualifiers -%}
 <div class='qualifiers'>
    {% if qualifiers.audience -%}
